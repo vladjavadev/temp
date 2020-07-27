@@ -1,8 +1,10 @@
 package com.example.webserver.controller;
 
 import com.example.webserver.domain.Message;
+import com.example.webserver.domain.User;
 import com.example.webserver.repos.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,10 +32,11 @@ public class MainController {
     }
 
     @PostMapping("/main")
-    public String add(@RequestParam String text,
+    public String add(@AuthenticationPrincipal User user,
+                      @RequestParam String text,
                       @RequestParam String tag,
                       Map<String, Object> model) {
-        Message message = new Message(text, tag);
+        Message message = new Message(text, tag,user);
 
         messageRepo.save(message);
 
